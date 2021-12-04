@@ -1,0 +1,27 @@
+services:
+  haproxy:
+    image: haproxytech/haproxy-alpine:2.4
+    volumes:
+      - ./config:/usr/local/etc/haproxy
+    network_mode: host
+    ports:
+      - 80:80
+      - 8404:8404
+
+  # web1:
+  #   image: jmalloc/echo-server:latest
+  #   networks: 
+  #     - haproxynet
+  # web2:
+  #   image: jmalloc/echo-server:latest
+  #   networks: 
+  #     - haproxynet
+  # web3:
+  #   image: jmalloc/echo-server:latest
+  #   networks: 
+  #     - haproxynet
+
+# networks:
+#   default:
+#     external: true
+#     driver: host

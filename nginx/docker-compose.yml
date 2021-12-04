@@ -1,0 +1,19 @@
+services:
+  nginx:
+    image: nginx:latest
+    volumes: 
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # - ./php_fastcgi.conf:/etc/nginx/php_fastcgi.conf
+      - ./nginx_logs:/var/log/nginx
+      - ./app:/app
+    ports:
+      - "80:80"
+      
+# volumes:
+#   mongoDB_data:
+#     external: true
+
+#networks: 
+#  default: 
+#    external: true
+#    name: vestacp-net

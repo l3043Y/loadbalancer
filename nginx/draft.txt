@@ -1,0 +1,176 @@
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    access_log off;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+    access_log  /var/log/nginx/access.log  main buffer=16k;
+
+    client_body_buffer_size 10K;
+    client_header_buffer_size 1k;
+    client_max_body_size 8m;
+    large_client_header_buffers 4 4k;
+
+    client_body_timeout 12;
+    client_header_timeout 12;
+    keepalive_timeout 15;
+    send_timeout 10;
+
+    upstream vestacp {
+	    # ip_hash;
+        server 192.168.11.75:80 weight=6;
+        server 192.168.11.105:80 weight=4;
+    }
+    server {
+        listen 80;
+        location / {
+            proxy_pass http://vestacp;
+        }
+    }
+}
+
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+
+
+events {
+    worker_connections 1024;
+}
+
+# resolver 0.0.0.0 status_zone=resolver-zone1;
+http {
+    access_log off;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main buffer=16k;
+    
+
+    client_body_buffer_size 10K;
+    client_header_buffer_size 1k;
+    client_max_body_size 8m;
+    large_client_header_buffers 4 4k;
+
+    client_body_timeout 12;
+    client_header_timeout 12;
+    keepalive_timeout 15;
+    send_timeout 10;
+
+    # proxy_cache_path /data/nginx/cache keys_zone=one:10m;
+    upstream vestacp {
+        # zone   vestacp 64k;
+	    ip_hash;
+        server 192.168.11.75:80 weight=6 max_fails=100 fail_timeout=1m;
+        server 192.168.11.105:80 weight=4 max_fails=100 fail_timeout=1m;
+    }
+    server {
+        listen 80;
+        # status_zone status_page;
+        location / {
+            proxy_pass http://vestacp;
+            # status_zone location_zone;
+            # health_check;
+        }
+
+        # location /api {
+        #     limit_except GET {
+        #         auth_basic "NGINX Plus API";
+        #         auth_basic_user_file /path/to/passwd/file;
+        #     }
+        #     api   write=on;
+        #     allow 192.168.1.0/24;
+        #     deny  all;
+        # }
+        # location = /dashboard.html {
+        #     root   /usr/share/nginx/html;
+        # }
+        # location /swagger-ui {
+        #     root   /usr/share/nginx/html;
+        # }
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+
+
+events {
+    worker_connections 1024;
+}
+
+# resolver 0.0.0.0 status_zone=resolver-zone1;
+http {
+    access_log on;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main buffer=16k;
+    
+
+    client_body_buffer_size 10K;
+    client_header_buffer_size 1k;
+    client_max_body_size 8m;
+    large_client_header_buffers 4 4k;
+
+    client_body_timeout 12;
+    client_header_timeout 12;
+    keepalive_timeout 15;
+    send_timeout 10;
+
+    # proxy_cache_path /data/nginx/cache keys_zone=one:10m;
+    upstream vestacp {
+        # zone   vestacp 64k;
+	    ip_hash;
+        server 192.168.11.75:80 weight=6;
+        server 192.168.11.105:80 weight=4;
+    }
+    server {
+        listen 80;
+        # status_zone status_page;
+        location / {
+            proxy_pass http://vestacp;
+            # status_zone location_zone;
+            # health_check;
+        }
+
+        # location /api {
+        #     limit_except GET {
+        #         auth_basic "NGINX Plus API";
+        #         auth_basic_user_file /path/to/passwd/file;
+        #     }
+        #     api   write=on;
+        #     allow 192.168.1.0/24;
+        #     deny  all;
+        # }
+        # location = /dashboard.html {
+        #     root   /usr/share/nginx/html;
+        # }
+        # location /swagger-ui {
+        #     root   /usr/share/nginx/html;
+        # }
+
+    }
+}
